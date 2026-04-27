@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan Auto-coaching 30 días — David Muñoz</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f4f0; color: #1a1a1a; padding: 2rem 1rem; }
+  .container { max-width: 880px; margin: 0 auto; }
+  h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+  .subtitle { font-size: 14px; color: #666; margin-bottom: 1.5rem; }
+
+  .progress-bar-wrap { background: #e5e5e5; border-radius: 99px; height: 8px; margin-bottom: 6px; }
+  .progress-bar-fill { background: #2563eb; height: 8px; border-radius: 99px; transition: width 0.4s; }
+  .progress-label { font-size: 12px; color: #888; margin-bottom: 1.5rem; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 1.5rem; }
+  .kpi { background: #fff; border: 1px solid #e5e5e5; border-radius: 10px; padding: 14px 16px; }
+  .kpi-n { font-size: 20px; font-weight: 600; color: #1a1a1a; }
+  .kpi-l { font-size: 12px; color: #888; margin-top: 2px; }
+
+  .links-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; }
+  .links-title { font-size: 12px; font-weight: 600; color: #065f46; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .links-box a { display: inline-block; font-size: 13px; color: #059669; text-decoration: none; margin-right: 16px; margin-bottom: 4px; }
+  .links-box a:hover { text-decoration: underline; }
+
+  .phase { margin: 2rem 0 0.75rem; }
+  .phase-badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; margin-bottom: 6px; }
+  .phase-title { font-size: 16px; font-weight: 600; margin: 0 0 2px; }
+  .phase-sub { font-size: 12px; color: #666; }
+  .phase-progress { font-size: 11px; color: #aaa; margin-top: 4px; }
+
+  .dgrid { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; margin-bottom: 0.5rem; }
+
+  .dc { background: #fff; border: 1px solid #e5e5e5; border-radius: 10px; padding: 10px 10px 8px; cursor: pointer; transition: border-color 0.12s; position: relative; }
+  .dc:hover { border-color: #aaa; }
+  .dc.active { border-color: #2563eb; }
+  .dc.done { background: #f0fdf4; border-color: #86efac; }
+  .dc-n { font-size: 10px; color: #aaa; margin: 0 0 3px; }
+  .dc-t { font-size: 11px; font-weight: 600; color: #1a1a1a; margin: 0 0 5px; line-height: 1.3; }
+  .dtag { font-size: 10px; padding: 2px 6px; border-radius: 20px; }
+  .tag-ac { background: #dbeafe; color: #1e40af; }
+  .tag-gr { background: #fef3c7; color: #92400e; }
+  .tag-ej { background: #fee2e2; color: #991b1b; }
+  .tag-rev { background: #d1fae5; color: #065f46; }
+  .check-icon { position: absolute; top: 8px; right: 8px; font-size: 14px; display: none; }
+  .dc.done .check-icon { display: block; }
+
+  .detail { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1.5rem; margin: 1rem 0 1.5rem; display: none; }
+  .detail.show { display: block; }
+  .det-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+  .det-title { font-size: 15px; font-weight: 600; color: #1a1a1a; flex: 1; }
+  .det-close { font-size: 11px; color: #aaa; cursor: pointer; padding: 4px 8px; border: 1px solid #e5e5e5; border-radius: 6px; background: #f9f9f9; white-space: nowrap; margin-left: 12px; }
+  .det-close:hover { color: #666; }
+
+  .timer-pill { display: inline-flex; align-items: center; font-size: 11px; background: #eff6ff; color: #1d4ed8; padding: 3px 10px; border-radius: 20px; margin-bottom: 14px; font-weight: 500; }
+  .det-section { margin-bottom: 12px; }
+  .det-lbl { font-size: 10px; color: #999; letter-spacing: 0.06em; font-weight: 600; margin-bottom: 4px; text-transform: uppercase; }
+  .det-val { font-size: 13px; color: #333; line-height: 1.6; }
+  .det-val a { color: #2563eb; text-decoration: none; font-weight: 500; }
+  .det-val a:hover { text-decoration: underline; }
+
+  .ej-box { background: #f8faff; border-left: 3px solid #2563eb; padding: 12px 16px; border-radius: 0 8px 8px 0; margin-top: 12px; }
+  .ej-lbl { font-size: 10px; color: #6b7280; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+  .ej-val { font-size: 13px; color: #1a1a1a; line-height: 1.65; }
+
+  .mark-btn { margin-top: 14px; padding: 8px 16px; font-size: 13px; font-weight: 500; border-radius: 8px; cursor: pointer; border: 1.5px solid #2563eb; background: #fff; color: #2563eb; transition: all 0.15s; }
+  .mark-btn:hover { background: #2563eb; color: #fff; }
+  .mark-btn.done-btn { border-color: #16a34a; color: #16a34a; }
+  .mark-btn.done-btn:hover { background: #16a34a; color: #fff; }
+
+  /* PLAYBOOK */
+  .playbook { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1.5rem; margin-top: 0.75rem; }
+  .pb-section { margin-bottom: 1.25rem; }
+  .pb-lbl { font-size: 10px; color: #999; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
+  .pb-hint { background: #f9f9f9; border: 1px dashed #d1d5db; border-radius: 8px; padding: 12px; font-size: 13px; color: #aaa; line-height: 1.6; min-height: 54px; }
+
+  hr.div { border: none; border-top: 1px solid #e5e5e5; margin: 2rem 0; }
+  .footer { font-size: 11px; color: #bbb; text-align: center; margin-top: 2rem; }
+
+  @media (max-width: 600px) {
+    .dgrid { grid-template-columns: repeat(3,1fr); }
+    .kpi-row { grid-template-columns: repeat(2,1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>🎯 Plan Auto-coaching 30 días</h1>
+  <p class="subtitle">Alfonso & Christian · Gerardo Rodríguez · Foco: excavar dolor, hablar menos · Meta: cerrar Maestría $10K</p>
+
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="pbar" style="width:0%"></div>
+  </div>
+  <p class="progress-label" id="plabel">0 de 30 días completados</p>
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-n">30</div><div class="kpi-l">días totales</div></div>
+    <div class="kpi"><div class="kpi-n">15 min</div><div class="kpi-l">máximo por día</div></div>
+    <div class="kpi"><div class="kpi-n">60→40</div><div class="kpi-l">meta ratio hablar</div></div>
+    <div class="kpi"><div class="kpi-n" id="kpi-done">0</div><div class="kpi-l">días completados</div></div>
+  </div>
+
+  <div class="links-box">
+    <p class="links-title">Links principales — tener abiertos antes de cada sesión</p>
+    <a href="https://www.youtube.com/@AlfonsoyChristian" target="_blank">→ Canal YouTube A&C</a>
+    <a href="https://open.spotify.com/show/6cmWxZ8lBhMbHHPVL7vqS7" target="_blank">→ Cállate y Vende (Spotify)</a>
+    <a href="https://www.youtube.com/c/C%C3%A1llateyVende" target="_blank">→ Cállate y Vende (YouTube)</a>
+  </div>
+
+  <div id="det" class="detail"></div>
+
+  <!-- FASE 1 -->
+  <div class="phase">
+    <span class="phase-badge" style="background:#dbeafe;color:#1e40af;">Días 1–10</span>
+    <p class="phase-title">Fase 1 — Cállate y abre bien</p>
+    <p class="phase-sub">Hablar menos · Gerardo + A&C mentalidad</p>
+    <p class="phase-progress" id="pp1"></p>
+  </div>
+  <div class="dgrid" id="g1"></div>
+
+  <!-- FASE 2 -->
+  <div class="phase">
+    <span class="phase-badge" style="background:#fef3c7;color:#92400e;">Días 11–22</span>
+    <p class="phase-title">Fase 2 — Preguntas que excavan dolor</p>
+    <p class="phase-sub">Apertura consultiva · A&C + Gerardo técnica</p>
+    <p class="phase-progress" id="pp2"></p>
+  </div>
+  <div class="dgrid" id="g2"></div>
+
+  <!-- FASE 3 -->
+  <div class="phase">
+    <span class="phase-badge" style="background:#d1fae5;color:#065f46;">Días 23–30</span>
+    <p class="phase-title">Fase 3 — Integración en zooms reales</p>
+    <p class="phase-sub">Aplicar + medir + construir tu playbook</p>
+    <p class="phase-progress" id="pp3"></p>
+  </div>
+  <div class="dgrid" id="g3"></div>
+
+  <hr class="div">
+
+  <!-- PLAYBOOK -->
+  <div class="phase">
+    <span class="phase-badge" style="background:#f3e8ff;color:#6b21a8;">Día 26 — Tu Playbook</span>
+    <p class="phase-title">Plantilla: Playbook de Zoom Maestría</p>
+    <p class="phase-sub">Completa esto conforme avanza el plan. Imprime o ten abierto antes de cada zoom.</p>
+  </div>
+  <div class="playbook">
+    <div class="pb-section">
+      <p class="pb-lbl">1. Mi apertura — máx. 40 seg antes de la primera pregunta</p>
+      <div class="pb-hint">Completa después del día 5 con tus propias palabras...</div>
+    </div>
+    <div class="pb-section">
+      <p class="pb-lbl">2. Mis 5 preguntas de excavación (en orden)</p>
+      <div class="pb-hint">1. ¿Cuál es tu situación actual con...?<br>2. ¿Qué no está funcionando?<br>3. ¿Qué te cuesta eso en dinero/tiempo/estrés?<br>4. ¿Por qué resolverlo ahora y no antes?<br>5. ¿Cómo se ve tu vida cuando eso esté resuelto?<br><br><em>Reescribe con tus palabras después del día 13...</em></div>
+    </div>
+    <div class="pb-section">
+      <p class="pb-lbl">3. Mi semáforo verde — señal para presentar Maestría</p>
+      <div class="pb-hint">¿Qué tiene que decir el prospecto para que sepas que es momento? Escríbelo después del día 16...</div>
+    </div>
+    <div class="pb-section">
+      <p class="pb-lbl">4. Mi pitch de Maestría en 90 segundos</p>
+      <div class="pb-hint">Problema → Solución → Resultado → Tiempo → Siguiente paso. Sin módulos ni tecnología. Completa después del día 17...</div>
+    </div>
+    <div class="pb-section" style="margin-bottom:0">
+      <p class="pb-lbl">5. Cómo propongo el siguiente paso</p>
+      <div class="pb-hint">¿Lo propones tú o esperas? ¿Con qué palabras exactas cierras? Completa después del día 25...</div>
+    </div>
+  </div>
+
+  <hr class="div">
+  <p class="footer">David Muñoz · Auto-coaching Ventas Maestría · 30 días · Generado con Claude · Haz clic en ✓ Marcar como hecho para ir viendo tu avance</p>
+</div>
+
+<script>
+const D = [
+  // FASE 1
+  {id:1,f:1,tag:'gr',tl:'Gerardo',title:'El vendedor que no se calla',
+   src:'Ep. 365 — El Vendedor Inseguro SIEMPRE Pierde',
+   link:'https://www.youtube.com/watch?v=2RkM2DsPMBU',
+   link2:'https://open.spotify.com/episode/24xrxS1AOnMFZgTs7YJWfq',
+   link2label:'→ Escuchar en Spotify (Ep. 330 — Vender sin Presionar)',
+   min:15,
+   concepto:'Gerardo lo dice directo: el vendedor que llena el silencio con su voz es el que menos cierra. Si hablas para llenar el vacío, pierdes. El silencio incomoda al vendedor, no al comprador.',
+   ej:'Escucha 15 min del episodio. Al terminar escribe en 3 líneas: ¿en qué momento exacto de tu zoom sientes más ganas de hablar sin que nadie te haya preguntado nada?'},
+
+  {id:2,f:1,tag:'ej',tl:'Ejercicio',title:'Mide tu ratio hoy',
+   src:'Tu próxima llamada real — sin herramienta extra',link:'',min:5,
+   concepto:'No puedes mejorar lo que no mides. Antes de cualquier técnica necesitas el dato real de cuánto hablas.',
+   ej:'En tu próxima zoom: pon un papel al lado. Cada vez que hablas tú, una marca. Cada vez que habla el prospecto, otra marca. Al final divide. ¿Cuál es tu ratio hoy? Ese es tu punto de partida.'},
+
+  {id:3,f:1,tag:'ac',tl:'A&C',title:'Tú eres el filtro, no el convencedor',
+   src:'A&C YouTube — Cierres de Ventas y Objeciones Parte 1',
+   link:'https://www.youtube.com/watch?v=dUN4nTPOJpI',min:15,
+   concepto:'A&C enseñan que el closer no va a convencer a nadie: va a evaluar si el prospecto califica. Ese cambio de rol elimina el 60% del monólogo. Si no tienes que convencer, no necesitas hablar tanto.',
+   ej:'Ve la sesión 1 del training gratuito (15 min). Escribe 1 frase para abrir tu próxima zoom que te posicione como evaluador, no como vendedor. Ejemplo: "Esta llamada es para ver si Maestría tiene sentido para tu caso específico."'},
+
+  {id:4,f:1,tag:'gr',tl:'Gerardo',title:'La primera pregunta lo cambia todo',
+   src:'Ep. 330 — Cómo Vender sin Presionar al Cliente',
+   link:'https://www.youtube.com/watch?v=2RkM2DsPMBU',
+   link2:'https://open.spotify.com/episode/24xrxS1AOnMFZgTs7YJWfq',
+   link2label:'→ Escuchar en Spotify',
+   min:15,
+   concepto:'La mayoría de vendedores desperdician la primera pregunta con "¿cómo estás?". Una sola pregunta bien hecha abre todo el dolor. El prospecto habla, tú escuchas.',
+   ej:'Escucha 15 min del episodio. Define tu primera pregunta para zooms de Maestría. Que empiece con "¿Qué te llevó a..." o "¿Cuéntame qué está pasando con...". Escríbela. Solo una.'},
+
+  {id:5,f:1,tag:'ej',tl:'Ejercicio',title:'Reescribe tu apertura',
+   src:'Ejercicio escrito — 15 min',link:'',min:15,
+   concepto:'La apertura determina quién controla el espacio. Si abres hablando del programa, el prospecto se pone en modo receptor pasivo. Si abres preguntando, ellos hablan y tú aprendes.',
+   ej:'Escribe tu apertura actual tal como la dices hoy (palabra por palabra). Luego reescríbela en máximo 3 frases donde tú hablas menos de 40 segundos antes de tu primera pregunta. Guarda ambas versiones para comparar al día 30.'},
+
+  {id:6,f:1,tag:'ac',tl:'A&C',title:'Por qué compra un perfil $10K',
+   src:'A&C YouTube — La lección más cara de nuestras vidas (Ventas High Ticket)',
+   link:'https://www.youtube.com/watch?v=uu6VvmJxpec',min:15,
+   concepto:'El comprador de Maestría no compra por características ni módulos. Compra porque alguien lo hizo sentir entendido antes de mostrarle nada. Si presentas antes de que el prospecto hable, ya perdiste.',
+   ej:'Ve sesión 2 del training A&C. Anota en qué minuto de tus zooms actuales presentas Maestría. Si es antes del minuto 20, ese es el problema central a resolver esta semana.'},
+
+  {id:7,f:1,tag:'ej',tl:'Ejercicio',title:'La regla del minuto 20',
+   src:'Aplicar en tu próxima zoom real',link:'',min:0,
+   concepto:'Regla concreta: no menciones el programa, el precio ni ningún beneficio antes del minuto 20. Los primeros 20 min son solo para que el prospecto hable.',
+   ej:'En tu próxima zoom pon un temporizador silencioso. No menciones Maestría hasta que pasen 20 minutos. Si el prospecto pregunta antes, responde: "Antes de contarte quiero entender tu situación — ¿qué está pasando hoy en tu negocio?"'},
+
+  {id:8,f:1,tag:'gr',tl:'Gerardo',title:'El silencio como herramienta',
+   src:'Ep. 365 — El Vendedor Inseguro SIEMPRE Pierde',
+   link:'https://www.youtube.com/watch?v=2RkM2DsPMBU',
+   min:15,
+   concepto:'El silencio después de una pregunta importante dura 4 segundos antes de que el vendedor lo rompa. El comprador en esos 4 segundos está procesando su respuesta honesta. Si hablas antes, esa respuesta se pierde.',
+   ej:'Escucha el episodio. Practica hoy en cualquier conversación: haz una pregunta, cuenta 5 segundos en tu cabeza antes de volver a hablar. Observa quién se incomoda primero.'},
+
+  {id:9,f:1,tag:'ej',tl:'Ejercicio',title:'Zoom real — solo preguntas',
+   src:'Tu próxima llamada — sin objetivo de cierre',link:'',min:0,
+   concepto:'Esta vez el objetivo NO es cerrar. Es sostener la conversación con preguntas el mayor tiempo posible y ver qué pasa cuando el prospecto habla más.',
+   ej:'En tu próxima zoom: cada vez que sientas el impulso de explicar algo, conviértelo en pregunta. "Maestría tiene X" → "¿Qué tan importante es X para ti ahora mismo?" Anota qué dice el prospecto que antes no decía.'},
+
+  {id:10,f:1,tag:'rev',tl:'Revisión',title:'Semana 1 — ¿qué cambió?',
+   src:'Autoevaluación escrita — 15 min',link:'',min:15,
+   concepto:'Sin revisión el aprendizaje no consolida. Este no es un día de consumo nuevo, es un día de medir.',
+   ej:'Responde por escrito: (1) ¿Cuál es tu ratio de hablar ahora vs el día 2? (2) ¿En qué momento de la llamada sigues hablando demasiado? (3) ¿Cuál fue la mejor pregunta que usaste esta semana? Esa pregunta es el inicio de la fase 2.'},
+
+  // FASE 2
+  {id:11,f:2,tag:'ac',tl:'A&C',title:'Dolor superficial vs dolor real',
+   src:'A&C YouTube — Cierres de Ventas y Objeciones Parte 2',
+   link:'https://www.youtube.com/watch?v=-QVsbyWV_RY',min:15,
+   concepto:'El dolor superficial es lo que dicen. El dolor real es lo que no dicen pero los mantiene despiertos a las 3am. A&C enseñan cómo llegar al segundo nivel.',
+   ej:'Ve sesión 3 del training A&C. Identifica 1 pregunta de excavación profunda para agregar esta semana. No "¿cuál es tu problema?" sino "¿qué pasa en tu negocio/vida si esto sigue igual 12 meses más?"'},
+
+  {id:12,f:2,tag:'gr',tl:'Gerardo',title:'Las preguntas que siempre funcionan',
+   src:'Ep. 330 — Cómo Vender sin Presionar (YouTube)',
+   link:'https://www.youtube.com/watch?v=2RkM2DsPMBU',
+   link2:'https://open.spotify.com/episode/24xrxS1AOnMFZgTs7YJWfq',
+   link2label:'→ Escuchar en Spotify',
+   min:15,
+   concepto:'Gerardo comparte preguntas que usa en cualquier venta. No son fórmulas: son preguntas que dejan hablar al prospecto y revelan lo que realmente bloquea la decisión.',
+   ej:'Escucha el episodio. Elige 3 preguntas que apliquen a Maestría. Escríbelas con TUS palabras, no copiadas. Son la estructura base de tus zooms de ahora en adelante.'},
+
+  {id:13,f:2,tag:'ej',tl:'Ejercicio',title:'Tu secuencia de 5 preguntas',
+   src:'Ejercicio escrito — 15 min',link:'',min:15,
+   concepto:'Una zoom sin secuencia de preguntas es una conversación improvisada. Con 5 preguntas en orden tienes un proceso, no un guión.',
+   ej:'Escribe TUS 5 preguntas para Maestría en orden: (1) situación actual, (2) qué no funciona, (3) qué cuesta ese problema, (4) por qué resolverlo ahora, (5) cómo se ve la vida cuando esté resuelto. En tus palabras, no copiadas de ningún lugar.'},
+
+  {id:14,f:2,tag:'ac',tl:'A&C',title:'El eco — hacer que el prospecto siga hablando',
+   src:'A&C YouTube — Cierres de Ventas y Objeciones Parte 5',
+   link:'https://www.youtube.com/watch?v=g5rd729rEC8',min:15,
+   concepto:'Cuando el prospecto termina de hablar, en lugar de responder, repites su última frase con tono de pregunta. Eso genera que siga hablando y profundizando sin que tú presiones.',
+   ej:'Ve el segmento de rapport de la Masterclass. Practica el "eco" hoy: alguien dice "el problema es que no tengo suficientes clientes." Tú respondes: "¿No suficientes clientes?" y esperas. ¿Qué dice después?'},
+
+  {id:15,f:2,tag:'ej',tl:'Ejercicio',title:'Zoom real — usa las 5 preguntas',
+   src:'Tu próxima llamada de Maestría',link:'',min:0,
+   concepto:'Primera prueba de tu secuencia propia en una llamada real. No es para cerrar: es para probar el flujo.',
+   ej:'Usa tus 5 preguntas del día 13 en secuencia. Al terminar la llamada anota: ¿llegaste a la pregunta 5? ¿En cuál pregunta habló más el prospecto? ¿En cuál sentiste más incomodidad tú?'},
+
+  {id:16,f:2,tag:'gr',tl:'Gerardo',title:'Cuándo presentar la solución',
+   src:'Ep. 238 — Los Peores Tips de Ventas (YouTube)',
+   link:'https://www.youtube.com/c/C%C3%A1llateyVende',
+   min:15,
+   concepto:'La solución se presenta solo cuando el prospecto ha confirmado verbalmente que tiene el problema Y que quiere resolverlo. No antes. Presentar antes es el error más común en high ticket.',
+   ej:'Después de escuchar: define tu semáforo verde personal. ¿Qué tiene que decir exactamente el prospecto para que sea el momento correcto de presentar Maestría? Escribe esa frase o señal.'},
+
+  {id:17,f:2,tag:'ac',tl:'A&C',title:'La presentación en 90 segundos',
+   src:'A&C YouTube — Closer de Ventas: cómo cerrar ventas por teléfono',
+   link:'https://www.youtube.com/watch?v=CrfyYbu5DSA',min:15,
+   concepto:'A&C enseñan que la presentación del programa debe durar máximo 90 segundos. Más de eso y pierdes al prospecto. El truco: presentas el resultado esperado, no el contenido ni los módulos.',
+   ej:'Ve el segmento de presentación en sesión 4. Escribe tu pitch de Maestría en máximo 5 líneas: problema → solución → resultado → tiempo → siguiente paso. Sin mencionar módulos, profesores, tecnología ni precio todavía.'},
+
+  {id:18,f:2,tag:'ej',tl:'Ejercicio',title:'Grábate — apertura de zoom',
+   src:'Grabación propia — audio o video — 15 min',link:'',min:15,
+   concepto:'No hay coach mejor que tu propia voz grabada. La mayoría de vendedores nunca se escuchan.',
+   ej:'Grábate solo haciendo los primeros 5 min de tu apertura ideal de zoom de Maestría: saludo + agenda en 1 frase + primera pregunta. Escúchate. ¿Cuántos segundos hablas antes de la primera pregunta? Meta: menos de 40 segundos.'},
+
+  {id:19,f:2,tag:'gr',tl:'Gerardo',title:'El prospecto que responde en monosílabos',
+   src:'Ep. 365 — El Vendedor Inseguro SIEMPRE Pierde',
+   link:'https://www.youtube.com/watch?v=2RkM2DsPMBU',
+   min:15,
+   concepto:'Hay prospectos que responden "sí", "no", "bien". El truco para activarlos es cambiar de pregunta abierta a pregunta narrativa. "¿Cómo fue cuando...?" en lugar de "¿Tienes ese problema?"',
+   ej:'Escucha el episodio. Anota 2 preguntas narrativas para cuando el prospecto responde poco. Empieza con "Cuéntame..." o "¿Cómo fue cuando...". Agrégalas a tu secuencia del día 13 como preguntas de rescate.'},
+
+  {id:20,f:2,tag:'ac',tl:'A&C',title:'Volver al dolor cuando el prospecto se desvía',
+   src:'A&C YouTube — Canal oficial @AlfonsoyChristian',
+   link:'https://www.youtube.com/@AlfonsoyChristian',min:15,
+   concepto:'Mantener posición no es ser frío. Es no perder el hilo cuando el prospecto cambia el tema. El concepto clave de A&C: "vuelve siempre al dolor."',
+   ej:'Ve el segmento de posición de la Masterclass. Define tu frase de retorno: cuando el prospecto se va por las ramas, ¿qué dices para volver al tema? Escríbela. Ej: "Entiendo, y relacionado con eso — ¿cómo está afectando esto tu negocio hoy?"'},
+
+  {id:21,f:2,tag:'ej',tl:'Ejercicio',title:'Zoom real — llega a la pregunta 5',
+   src:'Tu próxima llamada de Maestría',link:'',min:0,
+   concepto:'Segunda prueba. Esta vez el objetivo es llegar a la pregunta 5 antes de mencionar Maestría.',
+   ej:'Usa la secuencia de 5 preguntas. Objetivo: llegar a la pregunta 5 "¿cómo se ve tu vida cuando esto esté resuelto?" sin que tú hayas explicado nada del programa. ¿Lograste llegar? ¿Qué dijo el prospecto en la pregunta 5?'},
+
+  {id:22,f:2,tag:'rev',tl:'Revisión',title:'Semana 3 — autoevaluación',
+   src:'Autoevaluación escrita — 15 min',link:'',min:15,
+   concepto:'Punto de control antes de la fase de integración final.',
+   ej:'3 preguntas escritas: (1) ¿Cuánto bajó tu ratio de hablar? Número real. (2) ¿En cuántas zooms llegaste a la pregunta 5 antes de presentar? (3) ¿Cuál fue la pregunta que más abrió al prospecto? Esa va de primera en tu playbook.'},
+
+  // FASE 3
+  {id:23,f:3,tag:'ej',tl:'Ejercicio',title:'25 min solo preguntas — zoom real',
+   src:'Tu próxima zoom de Maestría',link:'',min:0,
+   concepto:'Integración total: apertura corta + 5 preguntas + silencio + eco + semáforo verde antes de presentar.',
+   ej:'Zoom de Maestría con la regla: 25 minutos solo preguntas, sin mencionar el programa. ¿El prospecto habla más que antes? ¿Dice cosas que antes no decía? Anota 1 cosa nueva que descubriste del prospecto que no habrías sabido si hubieras hablado tú.'},
+
+  {id:24,f:3,tag:'gr',tl:'Gerardo',title:'FUP sin desesperación',
+   src:'Ep. 330 — Cómo Vender sin Presionar (Spotify)',
+   link:'https://open.spotify.com/episode/24xrxS1AOnMFZgTs7YJWfq',
+   min:15,
+   concepto:'El FUP del closer ansioso destruye el marco ganado en la llamada. "¿Ya decidiste?" rompe todo. Gerardo enseña seguimiento con posición: agrega valor en lugar de preguntar por la decisión.',
+   ej:'Escucha el episodio. Escribe tu mensaje de FUP para alguien que dijo "lo pienso" hace 48h. Regla: no preguntes si ya decidió. Agrega un dato nuevo o una pregunta que regrese al dolor. Máximo 3 líneas de WhatsApp.'},
+
+  {id:25,f:3,tag:'ac',tl:'A&C',title:'El cierre que no parece cierre',
+   src:'A&C YouTube — Cierres de Ventas y Objeciones Parte 1 (repaso final)',
+   link:'https://www.youtube.com/watch?v=dUN4nTPOJpI',min:15,
+   concepto:'Cuando todo el proceso se hace bien — apertura corta, excavación, posición, semáforo verde — el cierre no se siente como cierre. El prospecto lo pide.',
+   ej:'Ve la parte final de la sesión 4. ¿Cómo propones el paso siguiente hoy en tus zooms? ¿Lo propones tú o esperas que el prospecto pida? ¿Con qué palabras exactas? Escríbelas.'},
+
+  {id:26,f:3,tag:'ej',tl:'Ejercicio',title:'Completa tu playbook',
+   src:'Sección Playbook al final de este documento',link:'',min:15,
+   concepto:'El playbook no es el de A&C ni el de Gerardo. Es tuyo, construido con lo que funcionó en tus propias llamadas.',
+   ej:'Completa las 5 secciones del Playbook que está al final de este archivo. Usa lo que aprendiste en el plan. Imprime o ten abierto en pantalla antes de cada zoom de Maestría.'},
+
+  {id:27,f:3,tag:'ej',tl:'Ejercicio',title:'Zoom con playbook en mano',
+   src:'Tu próxima zoom de Maestría',link:'',min:0,
+   concepto:'Primera vez que entras a una zoom con tu propio sistema documentado frente a ti.',
+   ej:'Haz la zoom con el playbook visible. No lo sigas al pie de la letra: es una guía de vuelo, no un script. Al terminar: ¿qué funcionó? ¿Qué cambiarías? Actualiza el playbook con esa información.'},
+
+  {id:28,f:3,tag:'gr',tl:'Gerardo',title:'Post-call review en 3 minutos',
+   src:'Canal YouTube Cállate y Vende — buscar "vendedores de antes vs ahora"',
+   link:'https://www.youtube.com/watch?v=fy1xKLPWCfU',
+   min:15,
+   concepto:'Los vendedores que mejoran más rápido son los que se analizan después de cada llamada. Gerardo tiene un sistema simple: 3 preguntas en 3 min que convierten cada llamada en aprendizaje.',
+   ej:'Escucha el episodio. Adopta 3 preguntas de revisión post-llamada como hábito rápido después de cada zoom. No análisis pesado: 3 min, 3 preguntas, lápiz en mano.'},
+
+  {id:29,f:3,tag:'ej',tl:'Ejercicio',title:'Ajusta tu playbook',
+   src:'Revisión del documento propio',link:'',min:15,
+   concepto:'El playbook ya fue probado en 2-3 llamadas reales. Necesita ajustes basados en lo que pasó, no en lo que pensaste que pasaría.',
+   ej:'Abre el playbook. Cambia lo que no funcionó. Agrega lo que sí funcionó aunque no estuviera escrito. ¿Cuáles fueron tus 2 mejores preguntas de excavación en llamadas reales? Ponlas de primeras en la sección 2.'},
+
+  {id:30,f:3,tag:'rev',tl:'Revisión',title:'Día 30 — qué cambió de verdad',
+   src:'Autoevaluación final — 15 min',link:'',min:15,
+   concepto:'Comparar el día 1 con el día 30. Sin adornos. Los números dicen más que las sensaciones.',
+   ej:'4 preguntas: (1) ¿Cuál es tu ratio actual de hablar en zoom? (2) ¿Llegas a la pregunta 5 antes de presentar Maestría? (3) ¿Subió tu tasa de cierre en Maestría vs antes del plan? (4) ¿Cuál es tu siguiente debilidad a trabajar en el próximo ciclo de 30 días?'}
+];
+
+// Storage de progreso en localStorage
+function getProgress(){ try { return JSON.parse(localStorage.getItem('coaching_progress')||'{}'); } catch(e){ return {}; } }
+function saveProgress(p){ try { localStorage.setItem('coaching_progress', JSON.stringify(p)); } catch(e){} }
+
+function countDone(p){ return Object.values(p).filter(v=>v).length; }
+
+function updateGlobal(){
+  const p = getProgress();
+  const done = countDone(p);
+  const pct = Math.round(done/30*100);
+  document.getElementById('pbar').style.width = pct+'%';
+  document.getElementById('plabel').textContent = done + ' de 30 días completados — ' + pct + '% del plan';
+  document.getElementById('kpi-done').textContent = done;
+}
+
+function updatePhaseProgress(fase, ids, elId){
+  const p = getProgress();
+  const done = ids.filter(id => p[id]).length;
+  document.getElementById(elId).textContent = done + '/' + ids.length + ' días completados';
+}
+
+function tStyle(t){
+  if(t==='ac') return 'tag-ac';
+  if(t==='gr') return 'tag-gr';
+  if(t==='ej') return 'tag-ej';
+  return 'tag-rev';
+}
+
+function buildG(fase, gid){
+  const p = getProgress();
+  const c = document.getElementById(gid);
+  const ids = D.filter(d=>d.f===fase).map(d=>d.id);
+  D.filter(d=>d.f===fase).forEach(day=>{
+    const el = document.createElement('div');
+    el.className = 'dc' + (p[day.id] ? ' done' : '');
+    el.dataset.id = day.id;
+    el.innerHTML = `<span class="check-icon">✅</span><p class="dc-n">Día ${day.id}</p><p class="dc-t">${day.title}</p><span class="dtag ${tStyle(day.tag)}">${day.tl}</span>`;
+    el.addEventListener('click',()=>show(day.id));
+    c.appendChild(el);
+  });
+  updatePhaseProgress(fase, ids, `pp${fase}`);
+}
+
+function show(id){
+  const day = D.find(d=>d.id===id);
+  const p = getProgress();
+  const panel = document.getElementById('det');
+  document.querySelectorAll('.dc').forEach(c=>c.classList.remove('active'));
+  document.querySelector(`.dc[data-id="${id}"]`).classList.add('active');
+
+  const timerHtml = day.min>0
+    ? `<span class="timer-pill">⏱ ${day.min} min estimados</span>`
+    : `<span class="timer-pill">📞 Aplicar en tu próxima llamada real</span>`;
+
+  let linkHtml = '';
+  if(day.link){
+    linkHtml = `<div class="det-section"><p class="det-lbl">Recurso principal</p><p class="det-val"><a href="${day.link}" target="_blank">${day.src} →</a>`;
+    if(day.link2) linkHtml += `<br><a href="${day.link2}" target="_blank">${day.link2label} →</a>`;
+    linkHtml += `</p></div>`;
+  } else {
+    linkHtml = `<div class="det-section"><p class="det-lbl">Fuente</p><p class="det-val" style="color:#aaa">${day.src}</p></div>`;
+  }
+
+  const isDone = p[id];
+  const btnLabel = isDone ? '↩ Marcar como pendiente' : '✓ Marcar como hecho';
+  const btnClass = isDone ? 'mark-btn done-btn' : 'mark-btn';
+
+  panel.innerHTML = `
+    <div class="det-head">
+      <p class="det-title">Día ${day.id} — ${day.title}</p>
+      <span class="det-close" onclick="closeD()">cerrar ✕</span>
+    </div>
+    ${timerHtml}
+    ${linkHtml}
+    <div class="det-section"><p class="det-lbl">Concepto clave</p><p class="det-val">${day.concepto}</p></div>
+    <div class="ej-box"><p class="ej-lbl">Ejercicio del día</p><p class="ej-val">${day.ej}</p></div>
+    <button class="${btnClass}" id="markbtn" onclick="toggleDone(${id})">${btnLabel}</button>
+  `;
+  panel.classList.add('show');
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function toggleDone(id){
+  const p = getProgress();
+  p[id] = !p[id];
+  saveProgress(p);
+  const card = document.querySelector(`.dc[data-id="${id}"]`);
+  if(p[id]){ card.classList.add('done'); } else { card.classList.remove('done'); }
+  updateGlobal();
+  // re-render phase counters
+  updatePhaseProgress(1, D.filter(d=>d.f===1).map(d=>d.id), 'pp1');
+  updatePhaseProgress(2, D.filter(d=>d.f===2).map(d=>d.id), 'pp2');
+  updatePhaseProgress(3, D.filter(d=>d.f===3).map(d=>d.id), 'pp3');
+  // update button
+  const isDone = p[id];
+  const btn = document.getElementById('markbtn');
+  btn.textContent = isDone ? '↩ Marcar como pendiente' : '✓ Marcar como hecho';
+  btn.className = isDone ? 'mark-btn done-btn' : 'mark-btn';
+}
+
+function closeD(){
+  document.getElementById('det').classList.remove('show');
+  document.querySelectorAll('.dc').forEach(c=>c.classList.remove('active'));
+}
+
+buildG(1,'g1');
+buildG(2,'g2');
+buildG(3,'g3');
+updateGlobal();
+</script>
+</body>
+</html>
