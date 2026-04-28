@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan Profit First & Finanzas — David Muñoz</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4ff;color:#1a1a1a;padding:2rem 1rem}
+  .container{max-width:860px;margin:0 auto}
+  h1{font-size:22px;font-weight:600;margin-bottom:4px}
+  .subtitle{font-size:14px;color:#666;margin-bottom:1.5rem}
+  .pbar-wrap{background:#dbeafe;border-radius:99px;height:8px;margin-bottom:6px}
+  .pbar-fill{background:#2563eb;height:8px;border-radius:99px;transition:width .4s}
+  .plabel{font-size:12px;color:#888;margin-bottom:1.5rem}
+  .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem}
+  .kpi{background:#fff;border:1px solid #dbeafe;border-radius:10px;padding:14px 16px}
+  .kpi-n{font-size:20px;font-weight:600;color:#1e40af}
+  .kpi-l{font-size:12px;color:#888;margin-top:2px}
+  .links-box{background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:1rem 1.25rem;margin-bottom:1rem}
+  .links-title{font-size:11px;font-weight:600;color:#1e40af;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+  .links-box a{display:inline-block;font-size:13px;color:#2563eb;text-decoration:none;margin-right:14px;margin-bottom:4px}
+  .links-box a:hover{text-decoration:underline}
+  .back-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:.75rem 1.25rem;margin-bottom:1.5rem}
+  .back-box a{font-size:13px;color:#059669;text-decoration:none;font-weight:500}
+  .back-box a:hover{text-decoration:underline}
+  .uso-banner{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:12px;color:#78350f;margin-bottom:1.5rem}
+  .phase{margin:2rem 0 .75rem}
+  .phase-badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;margin-bottom:6px}
+  .phase-title{font-size:16px;font-weight:600;margin:0 0 2px}
+  .phase-sub{font-size:12px;color:#666}
+  .phase-prog{font-size:11px;color:#aaa;margin-top:4px}
+  .dgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:.5rem}
+  .dc{background:#fff;border:1px solid #dbeafe;border-radius:10px;padding:10px 10px 8px;cursor:pointer;transition:border-color .12s;position:relative}
+  .dc:hover{border-color:#93c5fd}
+  .dc.active{border-color:#2563eb}
+  .dc.done{background:#eff6ff;border-color:#93c5fd}
+  .dc-n{font-size:10px;color:#aaa;margin:0 0 3px}
+  .dc-t{font-size:11px;font-weight:600;color:#1a1a1a;margin:0 0 5px;line-height:1.3}
+  .dtag{font-size:10px;padding:2px 6px;border-radius:20px}
+  .tag-pf{background:#dbeafe;color:#1e40af}
+  .tag-pr{background:#e0e7ff;color:#3730a3}
+  .tag-mc{background:#fce7f3;color:#9d174d}
+  .tag-ej{background:#fee2e2;color:#991b1b}
+  .tag-rev{background:#d1fae5;color:#065f46}
+  .tag-zoom{background:#fef3c7;color:#92400e}
+  .chk{position:absolute;top:8px;right:8px;font-size:14px;display:none}
+  .dc.done .chk{display:block}
+  .det{background:#fff;border:1px solid #dbeafe;border-radius:12px;padding:1.5rem;margin:1rem 0 1.5rem;display:none}
+  .det.show{display:block}
+  .det-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem}
+  .det-title{font-size:15px;font-weight:600;flex:1;color:#1e40af}
+  .det-close{font-size:11px;color:#aaa;cursor:pointer;padding:4px 8px;border:1px solid #e5e5e5;border-radius:6px;background:#f9f9f9;white-space:nowrap;margin-left:12px}
+  .pill{display:inline-flex;align-items:center;font-size:11px;padding:3px 10px;border-radius:20px;margin-bottom:14px;font-weight:500}
+  .pill-time{background:#eff6ff;color:#1d4ed8}
+  .pill-zoom{background:#fef3c7;color:#92400e}
+  .det-sec{margin-bottom:12px}
+  .det-lbl{font-size:10px;color:#999;letter-spacing:.06em;font-weight:600;margin-bottom:4px;text-transform:uppercase}
+  .det-val{font-size:13px;color:#333;line-height:1.6}
+  .det-val a{color:#2563eb;text-decoration:none;font-weight:500}
+  .det-val a:hover{text-decoration:underline}
+  .ej-box{background:#eff6ff;border-left:3px solid #2563eb;padding:12px 16px;border-radius:0 8px 8px 0;margin-top:12px}
+  .ej-lbl{font-size:10px;color:#6b7280;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+  .ej-val{font-size:13px;color:#1a1a1a;line-height:1.65}
+  .zoom-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;margin-top:10px}
+  .zoom-lbl{font-size:10px;color:#92400e;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px}
+  .zoom-val{font-size:12px;color:#78350f;line-height:1.55}
+  .rec-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 14px;margin-top:8px}
+  .rec-lbl{font-size:10px;color:#065f46;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px}
+  .rec-val{font-size:12px;color:#14532d;line-height:1.55}
+  .nota-wrap{margin-top:14px}
+  .nota-lbl{font-size:10px;color:#999;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
+  .nota-save{font-size:11px;color:#2563eb;cursor:pointer;font-weight:500;text-transform:none;letter-spacing:0}
+  .nota-save:hover{text-decoration:underline}
+  .nota-area{width:100%;border:1px solid #dbeafe;border-radius:8px;padding:10px 12px;font-size:13px;font-family:inherit;resize:vertical;min-height:80px;background:#fafeff;line-height:1.5}
+  .nota-area:focus{outline:none;border-color:#93c5fd}
+  .nota-ok{font-size:11px;color:#16a34a;display:none;margin-top:4px}
+  .mark-btn{margin-top:14px;padding:8px 16px;font-size:13px;font-weight:500;border-radius:8px;cursor:pointer;border:1.5px solid #2563eb;background:#fff;color:#2563eb;transition:all .15s}
+  .mark-btn:hover{background:#2563eb;color:#fff}
+  .mark-btn.done-btn{border-color:#16a34a;color:#16a34a}
+  .mark-btn.done-btn:hover{background:#16a34a;color:#fff}
+  .formula-box{background:#1e3a5f;color:#fff;border-radius:10px;padding:1rem 1.5rem;margin:1rem 0;text-align:center;font-size:15px;font-weight:600;letter-spacing:.02em}
+  .formula-box span{color:#93c5fd}
+  hr.div{border:none;border-top:1px solid #dbeafe;margin:2rem 0}
+  .footer{font-size:11px;color:#bbb;text-align:center;margin-top:2rem}
+  @media(max-width:600px){.dgrid{grid-template-columns:repeat(3,1fr)}.kpi-row{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>💰 Plan Profit First & Finanzas — 6 semanas</h1>
+<p class="subtitle">Mike Michalowicz · Margen · Pricing · Flujo de caja · Para usar como munición en zooms de Maestría</p>
+
+<div class="pbar-wrap"><div class="pbar-fill" id="pbar" style="width:0%"></div></div>
+<p class="plabel" id="plabel">0 de 24 sesiones completadas</p>
+
+<div class="kpi-row">
+  <div class="kpi"><div class="kpi-n">6</div><div class="kpi-l">semanas</div></div>
+  <div class="kpi"><div class="kpi-n">24</div><div class="kpi-l">sesiones totales</div></div>
+  <div class="kpi"><div class="kpi-n">15 min</div><div class="kpi-l">por sesión</div></div>
+  <div class="kpi"><div class="kpi-n" id="kpi-done">0</div><div class="kpi-l">completadas</div></div>
+</div>
+
+<div class="back-box">
+  <a href="plan_ventas_30dias_v5.html" target="_blank">← Volver al Plan de Ventas 30 días</a>
+</div>
+
+<div class="links-box">
+  <p class="links-title">📚 Recursos base</p>
+  <a href="https://www.youtube.com/results?search_query=profit+first+mike+michalowicz+español" target="_blank">→ Profit First en YouTube (español)</a>
+  <a href="https://www.amazon.com/-/es/Mike-Michalowicz/dp/0981808298" target="_blank">→ Libro Profit First (Amazon)</a>
+  <a href="https://www.youtube.com/results?search_query=margen+de+utilidad+negocios+español" target="_blank">→ Margen y Pricing en YouTube</a>
+</div>
+
+<div class="uso-banner">
+  💡 <strong>Cómo usar este plan:</strong> Úsalo los fines de semana o días sin zooms. Cada sesión es 15 min. El objetivo no es ser contador — es tener <strong>munición para la fase Kryptonita</strong> cuando el dolor del lead es financiero. Cada sesión incluye una frase lista para usar en zoom.
+</div>
+
+<div id="det" class="det"></div>
+
+<!-- SEMANA 1 -->
+<div class="phase">
+  <span class="phase-badge" style="background:#dbeafe;color:#1e40af">Semana 1</span>
+  <p class="phase-title">Profit First — El sistema completo</p>
+  <p class="phase-sub">Por qué el dinero se va aunque vendas bien · Las 5 cuentas · Ley de Parkinson</p>
+  <p class="phase-prog" id="pp1"></p>
+</div>
+<div class="dgrid" id="g1"></div>
+
+<!-- SEMANA 2 -->
+<div class="phase">
+  <span class="phase-badge" style="background:#e0e7ff;color:#3730a3">Semana 2</span>
+  <p class="phase-title">Margen y Pricing a fondo</p>
+  <p class="phase-sub">Por qué cobras poco · Cómo poner precios que sostengan el negocio</p>
+  <p class="phase-prog" id="pp2"></p>
+</div>
+<div class="dgrid" id="g2"></div>
+
+<!-- SEMANA 3 -->
+<div class="phase">
+  <span class="phase-badge" style="background:#fce7f3;color:#9d174d">Semana 3</span>
+  <p class="phase-title">Flujo de Caja</p>
+  <p class="phase-sub">La diferencia entre utilidad y liquidez · Por qué negocios rentables quiebran</p>
+  <p class="phase-prog" id="pp3"></p>
+</div>
+<div class="dgrid" id="g3"></div>
+
+<!-- SEMANA 4 -->
+<div class="phase">
+  <span class="phase-badge" style="background:#fee2e2;color:#991b1b">Semana 4</span>
+  <p class="phase-title">Punto de Equilibrio y Unit Economics</p>
+  <p class="phase-sub">Cuánto necesitas vender para sostenerte · Costo por cliente</p>
+  <p class="phase-prog" id="pp4"></p>
+</div>
+<div class="dgrid" id="g4"></div>
+
+<!-- SEMANA 5 -->
+<div class="phase">
+  <span class="phase-badge" style="background:#d1fae5;color:#065f46">Semana 5</span>
+  <p class="phase-title">LTV, CAC y Métricas de Marketing</p>
+  <p class="phase-sub">El valor real de un cliente · Cuánto puedes gastar para conseguirlo</p>
+  <p class="phase-prog" id="pp5"></p>
+</div>
+<div class="dgrid" id="g5"></div>
+
+<!-- SEMANA 6 -->
+<div class="phase">
+  <span class="phase-badge" style="background:#fef3c7;color:#92400e">Semana 6</span>
+  <p class="phase-title">Integración y Práctica en Zooms</p>
+  <p class="phase-sub">Usar todo esto como consultor · Frases reales para Kryptonita financiera</p>
+  <p class="phase-prog" id="pp6"></p>
+</div>
+<div class="dgrid" id="g6"></div>
+
+<hr class="div">
+<p class="footer">David Muñoz · Profit First & Finanzas · 6 semanas · Munición para zooms de Maestría</p>
+</div>
+
+<script>
+const D=[
+  // SEMANA 1 — PROFIT FIRST
+  {id:1,f:1,tag:'pf',tl:'P.First',title:'La fórmula que lo cambia todo',
+   src:'Buscar: "Profit First Mike Michalowicz español" en YouTube',
+   link:'https://www.youtube.com/results?search_query=profit+first+explicado+español',
+   min:15,
+   concepto:'La fórmula tradicional Ventas − Gastos = Utilidad deja la utilidad al final, y al final nunca queda. Profit First la invierte: Ventas − Utilidad = Gastos. Apartas la utilidad primero y operas con lo que sobra.',
+   ej:'Ve 15 min de video explicativo. Escribe con tus palabras la diferencia entre la fórmula tradicional y Profit First. ¿Cómo explicarías esto en 30 segundos a un empresario en zoom?',
+   zoom:'Cuando el lead dice "vendo mucho pero no me queda nada": "Eso tiene nombre. Se llama el síndrome de la fórmula invertida. La mayoría opera con Ventas − Gastos = Utilidad. El problema es que al final nunca queda nada. ¿Cuánto te queda a ti de lo que vendes al mes?"',
+   rec:'Este concepto solo ya te abre conversaciones que antes no podías tener.'},
+
+  {id:2,f:1,tag:'pf',tl:'P.First',title:'La Ley de Parkinson y el dinero',
+   src:'Buscar: "Ley de Parkinson dinero negocios" en YouTube',
+   link:'https://www.youtube.com/results?search_query=ley+de+parkinson+dinero+negocios',
+   min:15,
+   concepto:'El gasto se expande hasta consumir el ingreso disponible. Si tienes $10M en la cuenta, gastas $10M. Si tienes $3M, te las arreglas con $3M. Esta ley explica por qué ganar más no soluciona nada si no cambias el sistema.',
+   ej:'Piensa en tu propia operación: ¿cuándo has tenido más dinero disponible has gastado más? Escribe 2 ejemplos. Luego escribe cómo aplicarías la solución Profit First a tu caso.',
+   zoom:'"¿Alguna vez notaste que cuando entra más plata también salen más gastos y al final terminas igual? Eso no es mala suerte, es la Ley de Parkinson. El negocio gasta lo que tiene disponible. Maestría te enseña el sistema para romper ese ciclo."',
+   rec:'La Ley de Parkinson es el "aha moment" más poderoso para leads que facturan pero no acumulan.'},
+
+  {id:3,f:1,tag:'pf',tl:'P.First',title:'Las 5 cuentas del sistema',
+   src:'Buscar: "Profit First 5 cuentas sistema" en YouTube',
+   link:'https://www.youtube.com/results?search_query=profit+first+5+cuentas+sistema+español',
+   min:15,
+   concepto:'Income (entrada), Profit (utilidad separada primero), Owner\'s Pay (tu sueldo), Tax (impuestos), OpEx (gastos operativos). Cada ingreso se distribuye por porcentajes fijos dos veces al mes.',
+   ej:'Dibuja las 5 cuentas en papel con sus porcentajes básicos (Profit 5%, Owner 50%, Tax 15%, OpEx 30% para negocios pequeños). ¿Cómo se vería esto en tu operación actual de closer/consultor?',
+   zoom:'"El problema no es que no tengas suficiente dinero. Es que todo entra a una sola cuenta y de ahí sale todo sin control. ¿Qué pasaría si separaras el 5% de cada venta en otra cuenta que no puedes tocar? En 6 meses tendrías tu primer colchón."',
+   rec:'Las 5 cuentas son el sistema concreto. Aprenderlo te hace consultor, no solo vendedor de un programa.'},
+
+  {id:4,f:1,tag:'ej',tl:'Ejercicio',title:'Tu simulación Profit First',
+   src:'Ejercicio propio',link:'',min:15,
+   concepto:'Entender sin aplicar es entretenimiento. Necesitas simular el sistema en tu propio contexto.',
+   ej:'Toma tus ingresos del último mes. Aplica los porcentajes de las 5 cuentas. ¿Cuánto te quedaría en cada categoría? ¿Qué pasaría si lo hubieras hecho así desde el principio de este año?',
+   zoom:'Cuando un lead dice "no tengo de dónde sacar los $10K": "¿Cuánto facturaste el mes pasado? [escucha] Si hubieras separado el 5% cada mes durante el último año, ¿cuánto tendrías hoy guardado?"',
+   rec:'Este cálculo en vivo durante la zoom es más poderoso que cualquier argumento de venta.'},
+
+  // SEMANA 2 — MARGEN Y PRICING
+  {id:5,f:2,tag:'pr',tl:'Pricing',title:'La diferencia entre precio y valor',
+   src:'Buscar: "cómo poner precios servicios" o "pricing de alto valor" en YouTube',
+   link:'https://www.youtube.com/results?search_query=como+poner+precios+servicios+alto+valor',
+   min:15,
+   concepto:'El precio es lo que cobras. El valor es lo que el cliente percibe que recibe. La mayoría cobra barato no porque su servicio valga poco, sino porque no sabe articular el valor. Si el cliente solo ve el precio, el precio siempre parecerá caro.',
+   ej:'Escribe el valor real de lo que vendes (Maestría) en términos de ROI concreto: dinero ganado, tiempo ahorrado, problemas eliminados. ¿Cuánto vale eso vs los $10K?',
+   zoom:'Cuando dicen "es muy caro": "¿Caro comparado con qué? Si esto te genera $3K extra al mes, en 4 meses recuperaste la inversión. El costo real es no hacerlo. ¿Cuánto te está costando al mes no tener este sistema?"',
+   rec:'El precio siempre es caro cuando no se ha establecido el valor. El valor se establece excavando el dolor, no explicando el programa.'},
+
+  {id:6,f:2,tag:'pr',tl:'Pricing',title:'Margen bruto vs margen neto',
+   src:'Buscar: "margen bruto vs margen neto explicado" en YouTube',
+   link:'https://www.youtube.com/results?search_query=margen+bruto+neto+negocios+explicado',
+   min:15,
+   concepto:'Margen bruto = (Ventas − Costo del producto) / Ventas. Margen neto = (Utilidad después de todos los gastos) / Ventas. La mayoría de emprendedores conoce su margen bruto pero no su neto. El neto es el que importa.',
+   ej:'Calcula tu propio margen neto como closer/consultor. ¿Cuánto te queda realmente de cada $100 que facturas después de gastos, herramientas, impuestos y tu propio tiempo?',
+   zoom:'"Una de las métricas que más ignoramos los emprendedores es el margen neto. Facturamos $10M pero después de gastos queda $2M. Un 20% de margen neto es aceptable pero la mayoría está por debajo sin saberlo. ¿Sabes cuál es tu margen neto hoy?"',
+   rec:'Saber calcular margen en 30 segundos frente al lead te posiciona como consultor, no como vendedor.'},
+
+  {id:7,f:2,tag:'pr',tl:'Pricing',title:'Por qué cobras menos de lo que vales',
+   src:'Buscar: "por qué cobrar más precio psicología" en YouTube',
+   link:'https://www.youtube.com/results?search_query=por+que+cobrar+mas+precio+psicologia+ventas',
+   min:15,
+   concepto:'La mayoría cobra barato por miedo al rechazo, no por mérito del servicio. El precio bajo comunica baja confianza. Los perfiles $10K desconfían de lo barato porque asocian precio con calidad.',
+   ej:'Escribe: ¿cuánto cobras tú por tus servicios de consultoría? ¿Cuánto deberías cobrar si tu tasa de cierre de Maestría llega al 30%? ¿Qué te frena a subir el precio?',
+   zoom:'"Fíjate en algo: los programas de $97 tienen tasas de abandono del 80%. Los de $10K tienen tasas de completación del 70%. El precio filtra el compromiso. ¿Prefieres 100 clientes que no aplican o 10 que transforman su negocio?"',
+   rec:'El precio bajo es una señal de inseguridad. Para el perfil $10K, lo barato genera desconfianza.'},
+
+  {id:8,f:2,tag:'ej',tl:'Ejercicio',title:'Frases de precio para Maestría',
+   src:'Ejercicio propio',link:'',min:15,
+   concepto:'Tener el marco mental no es suficiente. Necesitas frases listas para el momento exacto de la llamada.',
+   ej:'Escribe 3 versiones de respuesta a "es muy caro": una basada en ROI ($), una basada en costo de no actuar, una basada en precio vs valor. Prueba las 3 en tu próxima semana y anota cuál funciona mejor.',
+   zoom:'Usa las 3 frases que escribiste esta semana.',
+   rec:'Las frases de precio se preparan antes de la llamada, no se improvisan cuando el prospecto ya dijo "es caro".'},
+
+  // SEMANA 3 — FLUJO DE CAJA
+  {id:9,f:3,tag:'mc',tl:'Flujo',title:'Utilidad vs liquidez — la diferencia clave',
+   src:'Buscar: "flujo de caja vs utilidad diferencia" en YouTube',
+   link:'https://www.youtube.com/results?search_query=flujo+de+caja+vs+utilidad+diferencia+negocios',
+   min:15,
+   concepto:'Puedes tener utilidad en el papel y no tener dinero en la cuenta. Esto mata más negocios que la falta de ventas. Un negocio puede ser rentable y quebrar por falta de liquidez.',
+   ej:'Entiende la diferencia y escribe un ejemplo de tu sector: un emprendedor que factura $20M/mes pero cobra a 60 días. ¿Tiene utilidad? ¿Tiene liquidez? ¿Puede pagar nómina mañana?',
+   zoom:'"¿Cuándo cobras tus ventas? ¿Pago inmediato o a crédito? Ahí está parte del problema. Muchos negocios son rentables en papel pero tienen crisis de caja mensual porque cobran tarde y pagan pronto."',
+   rec:'Entender flujo de caja te hace diferente a cualquier otro closer. Puedes diagnosticar el negocio, no solo vender un programa.'},
+
+  {id:10,f:3,tag:'mc',tl:'Flujo',title:'Los 3 errores de flujo más comunes',
+   src:'Buscar: "errores de flujo de caja emprendedores" en YouTube',
+   link:'https://www.youtube.com/results?search_query=errores+flujo+de+caja+emprendedores+colombia',
+   min:15,
+   concepto:'(1) Cobrar tarde y pagar pronto. (2) No separar dinero personal de dinero del negocio. (3) No prever gastos irregulares (impuestos, mantenimiento). Los tres son hábitos, no mala suerte.',
+   ej:'¿Cuál de estos 3 errores aplica a los leads que más cierras? Escribe cómo cada uno genera el dolor que los lleva a buscar Maestría.',
+   zoom:'"¿Mezclas plata personal con la del negocio? [si dice sí] Eso no es un problema de ventas, es un problema de estructura. Y eso es exactamente lo que Maestría ataca en el módulo de finanzas."',
+   rec:'Cuando el lead mezcla plata personal y del negocio, ya tienes el dolor. No necesitas buscar más.'},
+
+  {id:11,f:3,tag:'mc',tl:'Flujo',title:'Cómo leer el estado de una empresa en 5 preguntas',
+   src:'Ejercicio de diagnóstico propio',link:'',min:15,
+   concepto:'Como consultor necesitas poder hacer un diagnóstico financiero rápido sin ser contador. 5 preguntas te dan el mapa del dolor financiero del lead.',
+   ej:'Aprende estas 5 preguntas de diagnóstico: (1) ¿Cuánto facturas al mes? (2) ¿Cuánto te queda después de gastos? (3) ¿Cobras de contado o a crédito? (4) ¿Tienes reserva para 3 meses? (5) ¿Mezclas finanzas personales y del negocio? Practica hacerlas fluir en conversación natural.',
+   zoom:'Estas 5 preguntas son tu diagnóstico de Kryptonita financiera. Cuando todas las respuestas son "mal", el dolor está listo.',
+   rec:'No preguntes las 5 de golpe. Úsalas como eco dentro de la conversación natural de la zoom.'},
+
+  {id:12,f:3,tag:'ej',tl:'Ejercicio',title:'Zoom financiera — simulación',
+   src:'Role play propio',link:'',min:15,
+   concepto:'Todo el conocimiento financiero de las 3 semanas entra en una sola secuencia de preguntas de diagnóstico.',
+   ej:'Haz un role play solo (grábate) simulando que tu lead tiene dolor financiero. Usa las 5 preguntas del día 11, luego conecta con Profit First (día 1-3) y margen (días 5-7). ¿Fluyó natural? ¿Dónde te trabaste?',
+   zoom:'Esta es la sesión completa de práctica. El objetivo es que puedas hablar de finanzas con la misma naturalidad con que hablas de ventas.',
+   rec:'Si la conversación financiera se siente forzada, practica hasta que fluya. El lead lo nota.'},
+
+  // SEMANA 4 — PUNTO DE EQUILIBRIO
+  {id:13,f:4,tag:'ej',tl:'Equilibrio',title:'Qué es el punto de equilibrio',
+   src:'Buscar: "punto de equilibrio empresas explicado sencillo" en YouTube',
+   link:'https://www.youtube.com/results?search_query=punto+de+equilibrio+negocios+explicado+sencillo',
+   min:15,
+   concepto:'Es el nivel de ventas donde los ingresos igualan los costos. Por debajo: pérdida. Por encima: utilidad. Saber esto le dice al emprendedor exactamente cuánto necesita vender para sobrevivir y para crecer.',
+   ej:'Calcula tu propio punto de equilibrio como closer/consultor: gastos fijos mensuales / margen de contribución por venta. ¿Cuántas zooms necesitas cerrar al mes solo para cubrir gastos?',
+   zoom:'"¿Sabes cuánto necesitas vender al mes para no perder dinero? Eso se llama punto de equilibrio y la mayoría de emprendedores no lo tiene claro. Si no sabes ese número, no sabes si tus esfuerzos de ventas son suficientes."',
+   rec:'El emprendedor que no sabe su punto de equilibrio trabaja sin brújula. Ese dolor es una entrada directa a Maestría.'},
+
+  {id:14,f:4,tag:'ej',tl:'Equilibrio',title:'Unit Economics — el costo real por cliente',
+   src:'Buscar: "unit economics startups empresas explicado" en YouTube',
+   link:'https://www.youtube.com/results?search_query=unit+economics+empresas+explicado+español',
+   min:15,
+   concepto:'¿Cuánto te cuesta conseguir un cliente vs cuánto te deja? Si el costo de adquisición es mayor que el valor del cliente, el negocio sangra aunque tenga muchos clientes.',
+   ej:'Calcula para Maestría: si cierras 1 de cada 5 zooms y cada zoom te cuesta 1 hora de trabajo, ¿cuánto te "cuesta" cada cierre en tiempo? ¿Qué pasa si subes a 1 de cada 3?',
+   zoom:'"¿Sabes cuánto te cuesta conseguir un nuevo cliente? ¿En publicidad, tiempo, esfuerzo? Si eso es más de lo que te deja ese cliente, tienes un problema de unit economics que ningún volumen de ventas soluciona."',
+   rec:'Unit economics explica por qué crecer más rápido a veces hunde el negocio en lugar de salvarlo.'},
+
+  {id:15,f:4,tag:'ej',tl:'Ejercicio',title:'Dashboard básico de salud financiera',
+   src:'Ejercicio propio',link:'',min:15,
+   concepto:'Como consultor necesitas poder leer la salud de un negocio con 4 métricas rápidas.',
+   ej:'Define tus 4 métricas de salud financiera para un negocio como los que cierras en Maestría: (1) margen neto %, (2) punto de equilibrio mensual, (3) costo de adquisición de cliente, (4) reserva de caja en meses. Crea una tabla simple que puedas mostrar en zoom.',
+   zoom:'Cuando el lead menciona cualquier dolor financiero: "Déjame hacerte 4 preguntas rápidas para entender la salud financiera de tu negocio..."',
+   rec:'Mostrar un framework de diagnóstico en zoom posiciona al closer como consultor estratégico, no como vendedor.'},
+
+  {id:16,f:4,tag:'ej',tl:'Ejercicio',title:'Practica el diagnóstico en zoom real',
+   src:'Tu próxima zoom de Maestría',link:'',min:0,
+   concepto:'El conocimiento sin práctica real es teoría.',
+   ej:'En tu próxima zoom de Maestría, cuando llegues a la fase de excavación de dolor, introduce 1-2 preguntas financieras de diagnóstico de forma natural. Anota cómo reacciona el lead.',
+   zoom:'Esta es la primera prueba real de tu conocimiento financiero en una llamada. No necesitas usar todo — con 1 pregunta bien hecha es suficiente.',
+   rec:'El primer uso del diagnóstico financiero en zoom siempre se siente torpe. Eso es normal. El segundo ya es más fluido.'},
+
+  // SEMANA 5 — LTV Y CAC
+  {id:17,f:5,tag:'rev',tl:'LTV',title:'LTV — el valor real de un cliente',
+   src:'Buscar: "LTV lifetime value clientes explicado" en YouTube',
+   link:'https://www.youtube.com/results?search_query=LTV+lifetime+value+clientes+explicado+español',
+   min:15,
+   concepto:'LTV (Lifetime Value) es cuánto dinero te deja un cliente durante toda la relación, no solo en la primera compra. Un cliente de Maestría que después compra consultoría puede valer 5x el precio inicial.',
+   ej:'Calcula el LTV potencial de un cliente de Maestría: precio inicial + posibles upsells (consultoría, siguiente programa, referidos). ¿Cuánto vale realmente ese cliente en 2 años?',
+   zoom:'"Un cliente de $10K que luego te refiere 2 clientes más y compra tu consultoría de $5K vale $25K. ¿Cuánto vale cada cliente en tu negocio en 2 años? Si no lo sabes, estás subvalorando cada venta."',
+   rec:'Cuando el lead entiende su LTV, la inversión en Maestría se ve diferente. Deja de ser un gasto y se convierte en multiplicador.'},
+
+  {id:18,f:5,tag:'rev',tl:'LTV/CAC',title:'CAC — cuánto cuesta conseguir un cliente',
+   src:'Buscar: "CAC costo adquisicion cliente marketing" en YouTube',
+   link:'https://www.youtube.com/results?search_query=CAC+costo+adquisicion+cliente+marketing+español',
+   min:15,
+   concepto:'CAC (Customer Acquisition Cost) es el costo total de marketing y ventas dividido por el número de clientes nuevos. La regla básica: LTV debe ser al menos 3x el CAC para que el negocio sea sostenible.',
+   ej:'Calcula tu CAC como closer para Maestría: cuánto tiempo y herramientas inviertes por cada cierre. ¿Es sostenible? ¿Qué pasaría si tu tasa de cierre subiera de 20% a 35%?',
+   zoom:'"¿Cuánto te gastas en conseguir un nuevo cliente entre publicidad y tiempo? Y ¿cuánto te deja ese cliente? Si el ratio no es al menos 1:3, tienes un problema de eficiencia, no de volumen."',
+   rec:'La relación LTV:CAC es el indicador más honesto de la salud de un negocio. Conocerlo te hace consultor real.'},
+
+  {id:19,f:5,tag:'rev',tl:'Métricas',title:'Las 3 métricas que todo emprendedor debe saber',
+   src:'Buscar: "métricas financieras básicas emprendedores" en YouTube',
+   link:'https://www.youtube.com/results?search_query=metricas+financieras+basicas+emprendedores+colombia',
+   min:15,
+   concepto:'(1) Margen neto %, (2) Punto de equilibrio mensual, (3) Ratio LTV:CAC. Con estas 3 puedes evaluar cualquier negocio en 5 minutos y saber si está sano o no.',
+   ej:'Practica explicar estas 3 métricas en voz alta como si se las explicaras a un emprendedor en zoom. Grábate. ¿Sonas fluido o mecánico? ¿Usas ejemplos concretos?',
+   zoom:'Estas 3 métricas son tu diagnóstico ejecutivo. Las puedes mencionar en zoom como: "Hay 3 números que determinan si un negocio es sostenible o no. ¿Los tienes claros?"',
+   rec:'La pregunta "¿los tienes claros?" casi siempre genera un "no" o un silencio. Ese silencio es la puerta al dolor.'},
+
+  {id:20,f:5,tag:'ej',tl:'Ejercicio',title:'Integra finanzas a tu secuencia de preguntas',
+   src:'Revisión propia',link:'',min:15,
+   concepto:'El conocimiento financiero debe integrarse naturalmente en tu secuencia de excavación, no aparecer como un tema separado.',
+   ej:'Revisa tus 5 preguntas de excavación del plan de ventas. ¿Dónde encajaría una pregunta financiera de forma natural? Reescribe la secuencia incluyendo 1 pregunta de diagnóstico financiero.',
+   zoom:'La pregunta financiera que mejor encaja en la secuencia de excavación es: "¿Y eso cómo afecta los números del negocio?" — abre la puerta sin forzarla.',
+   rec:'Una pregunta financiera bien colocada duplica el dolor percibido porque conecta el problema emocional con el costo real.'},
+
+  // SEMANA 6 — INTEGRACIÓN
+  {id:21,f:6,tag:'zoom',tl:'Zoom',title:'Guión: Kryptonita financiera',
+   src:'Construcción propia basada en las 5 semanas',link:'',min:15,
+   concepto:'Cuando el dolor del lead es financiero, tienes un guión de excavación específico que usa todo lo aprendido en Profit First, margen, flujo y métricas.',
+   ej:'Escribe tu guión de Kryptonita financiera completo: 5 preguntas de diagnóstico → validar el dolor → conectar con Maestría. Máximo 1 página. Debe fluir como conversación, no como entrevista.',
+   zoom:'Este guión es tu activo principal de esta semana. Práctica: úsalo en tu próxima zoom donde el lead mencione cualquier problema de dinero.',
+   rec:'El guión de Kryptonita financiera es diferente al de Kryptonita operativa. Tienen el mismo objetivo pero diferentes preguntas.'},
+
+  {id:22,f:6,tag:'zoom',tl:'Zoom',title:'Zoom real — dolor financiero',
+   src:'Tu próxima zoom de Maestría donde aparezca dolor financiero',link:'',min:0,
+   concepto:'La prueba real de las 6 semanas.',
+   ej:'En la próxima zoom donde el lead mencione dinero, plata, flujo, deudas, o "no me alcanza": activa el guión del día 21. Anota cómo reaccionó. ¿Se abrió más? ¿Cerró?',
+   zoom:'Esta es la sesión de aplicación. No hay ejercicio escrito. Solo ejecución y anotación posterior.',
+   rec:'La primera vez que uses el diagnóstico financiero completo en una zoom real y el lead diga "nunca nadie me había preguntado eso", sabrás que funcionó.'},
+
+  {id:23,f:6,tag:'rev',tl:'Revisión',title:'Semana 6 — tu repertorio de frases',
+   src:'Construcción propia',link:'',min:15,
+   concepto:'Todo el aprendizaje financiero se condensa en un repertorio de frases listas para usar en zoom.',
+   ej:'Compila tus mejores frases de cada semana: 1 frase de Profit First, 1 de margen/precio, 1 de flujo de caja, 1 de punto de equilibrio, 1 de LTV/CAC. 5 frases que son tu munición financiera en zoom.',
+   zoom:'Estas 5 frases son tu toolkit financiero. No las memorizas: las internalizas hasta que salen naturales.',
+   rec:'Un closer que habla de finanzas con naturalidad cierra 2x más en perfiles empresariales porque le habla al mismo lenguaje del lead.'},
+
+  {id:24,f:6,tag:'rev',tl:'Revisión',title:'Cierre — qué cambió como consultor',
+   src:'Autoevaluación final',link:'',min:15,
+   concepto:'Comparar el día 1 con la semana 6 en términos de tu capacidad de diagnóstico financiero.',
+   ej:'(1) ¿Puedes explicar Profit First en 30 segundos? (2) ¿Calculas margen neto de un negocio en 2 minutos? (3) ¿Usaste alguna pregunta financiera en zoom esta semana? (4) ¿Cómo cambió la reacción de los leads cuando hablas de finanzas?',
+   zoom:'El objetivo no era ser contador. Era ser el closer que entiende el negocio del lead mejor que él mismo.',
+   rec:'Este conocimiento financiero es también la base de tu oferta de Closer Latino Equipos a $1,500 — diferencia al consultor del simple closer.'}
+];
+
+function getP(){try{return JSON.parse(localStorage.getItem('pf_p')||'{}')}catch(e){return{}}}
+function saveP(p){try{localStorage.setItem('pf_p',JSON.stringify(p))}catch(e){}}
+function getNota(id){try{return localStorage.getItem('pf_n'+id)||''}catch(e){return''}}
+function saveNota(id,v){try{localStorage.setItem('pf_n'+id,v)}catch(e){}}
+function countD(p){return Object.values(p).filter(v=>v).length}
+
+function updateGlobal(){
+  const p=getP(),done=countD(p),pct=Math.round(done/24*100);
+  document.getElementById('pbar').style.width=pct+'%';
+  document.getElementById('plabel').textContent=done+' de 24 sesiones completadas — '+pct+'% del plan';
+  document.getElementById('kpi-done').textContent=done;
+}
+function updatePhase(f,eid){
+  const p=getP(),ids=D.filter(d=>d.f===f).map(d=>d.id),done=ids.filter(id=>p[id]).length;
+  document.getElementById(eid).textContent=done+'/'+ids.length+' sesiones completadas';
+}
+function tStyle(t){
+  const m={pf:'tag-pf',pr:'tag-pr',mc:'tag-mc',ej:'tag-ej',rev:'tag-rev',zoom:'tag-zoom'};
+  return m[t]||'tag-ej';
+}
+function buildG(f,gid){
+  const p=getP(),c=document.getElementById(gid);
+  D.filter(d=>d.f===f).forEach(day=>{
+    const el=document.createElement('div');
+    el.className='dc'+(p[day.id]?' done':'');
+    el.dataset.id=day.id;
+    el.innerHTML=`<span class="chk">✅</span><p class="dc-n">Sesión ${day.id}</p><p class="dc-t">${day.title}</p><span class="dtag ${tStyle(day.tag)}">${day.tl}</span>`;
+    el.addEventListener('click',()=>show(day.id));
+    c.appendChild(el);
+  });
+  updatePhase(f,'pp'+f);
+}
+function show(id){
+  const day=D.find(d=>d.id===id),p=getP(),panel=document.getElementById('det');
+  document.querySelectorAll('.dc').forEach(c=>c.classList.remove('active'));
+  document.querySelector(`.dc[data-id="${id}"]`).classList.add('active');
+
+  const timePill=day.min>0
+    ?`<span class="pill pill-time">⏱ ${day.min} min estimados</span>`
+    :`<span class="pill pill-zoom">📞 Aplicar en zoom real</span>`;
+
+  let srcHtml=day.link
+    ?`<div class="det-sec"><p class="det-lbl">Recurso</p><p class="det-val"><a href="${day.link}" target="_blank">${day.src} →</a></p></div>`
+    :`<div class="det-sec"><p class="det-lbl">Fuente</p><p class="det-val" style="color:#aaa">${day.src}</p></div>`;
+
+  const isDone=p[id],notaVal=getNota(id);
+  panel.innerHTML=`
+    <div class="det-head">
+      <p class="det-title">Sesión ${day.id} — ${day.title}</p>
+      <span class="det-close" onclick="closeD()">cerrar ✕</span>
+    </div>
+    ${timePill}
+    ${srcHtml}
+    <div class="det-sec"><p class="det-lbl">Concepto clave</p><p class="det-val">${day.concepto}</p></div>
+    <div class="ej-box"><p class="ej-lbl">Ejercicio / Acción</p><p class="ej-val">${day.ej}</p></div>
+    <div class="zoom-box"><p class="zoom-lbl">💬 Frase para usar en zoom</p><p class="zoom-val">${day.zoom}</p></div>
+    <div class="rec-box"><p class="rec-lbl">✅ Para recordar siempre</p><p class="rec-val">${day.rec}</p></div>
+    <div class="nota-wrap">
+      <div class="nota-lbl">
+        <span>📝 Mis notas — Sesión ${day.id}</span>
+        <span class="nota-save" onclick="guardarNota(${id})">Guardar</span>
+      </div>
+      <textarea class="nota-area" id="nota-${id}" placeholder="Lo que aprendiste, cómo lo aplicaste en zoom...">${notaVal}</textarea>
+      <p class="nota-ok" id="ok-${id}">✓ Guardado</p>
+    </div>
+    <button class="${isDone?'mark-btn done-btn':'mark-btn'}" id="mbtn" onclick="toggleD(${id})">${isDone?'↩ Marcar como pendiente':'✓ Marcar como hecho'}</button>
+  `;
+  panel.classList.add('show');
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function guardarNota(id){
+  const ta=document.getElementById('nota-'+id);
+  if(ta) saveNota(id,ta.value);
+  const ok=document.getElementById('ok-'+id);
+  if(ok){ok.style.display='block';setTimeout(()=>{ok.style.display='none'},2000)}
+}
+function toggleD(id){
+  const p=getP();p[id]=!p[id];saveP(p);
+  const card=document.querySelector(`.dc[data-id="${id}"]`);
+  p[id]?card.classList.add('done'):card.classList.remove('done');
+  updateGlobal();
+  [1,2,3,4,5,6].forEach(f=>updatePhase(f,'pp'+f));
+  const btn=document.getElementById('mbtn');
+  btn.textContent=p[id]?'↩ Marcar como pendiente':'✓ Marcar como hecho';
+  btn.className=p[id]?'mark-btn done-btn':'mark-btn';
+}
+function closeD(){
+  document.getElementById('det').classList.remove('show');
+  document.querySelectorAll('.dc').forEach(c=>c.classList.remove('active'));
+}
+[1,2,3,4,5,6].forEach(f=>buildG(f,'g'+f));
+updateGlobal();
+</script>
+</body>
+</html>
